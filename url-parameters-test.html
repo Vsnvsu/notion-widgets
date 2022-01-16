@@ -1,0 +1,20 @@
+<style>
+  #params-list {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    border: 1px solid black;
+  }
+</style>
+<div id="params-list">
+  
+</div>
+<script>
+  const urlParams = new URLSearchParams(queryString);
+  const entries = urlParams.entries();
+  const list = document.getElementById("params-list");
+  
+  for(const entry of entries) {
+    list.innerHTML += `${entry[0]}: ${entry[1]}<br>`
+  }
+</script>
