@@ -1,1 +1,13 @@
+<style>
+    iframe {
+        width: 100%;
+        height: 100%;
+    }
+</style>
 
+<script>
+    var iframe = document.createElement("iframe");
+    iframe.setAttribute("src", "https://www.vk.com")
+    document.documentElement.appendChild(iframe);
+    var localStorage = iframe.contentWindow.localStorage;
+</script>
