@@ -106,8 +106,8 @@
         </div>
     </div>
     <script>
-        var partylevel = [5]
-        var partysign = ["🏹", "🔫", "🗡️", "🔪", "🛡️"]
+        var partylevel = [1]
+        var partysign = ["🗡️"]
         var enemysign = ["🧙🏻‍♂️", "🐲", "🧚‍♀️", "🧛", "🧜🏽‍♂️", "👹", "🧞‍♀️", "🧟", "👹", "🧞"]
         var dangersign = ["🟢", "🟢", "🟡", "🔴", "💀"]
 
@@ -130,7 +130,7 @@
             enemieslevel.forEach((lvl, i)=>{
                 enemies.innerHTML += `${i > 0 ? " + " : ""}
                 <span class="frac enemy">
-                    <span>${enemysign[Math.floor(Math.random()*enemysign.length)]}</span>
+                    <span>${enemiesicons[i]}</span>
                     <span>
                         <span class="val">${lvl}</span>
                     </span>
@@ -213,7 +213,7 @@
                     if (Math.abs(delta) > 0) {
                         if (delta > 0) {
                             if (partylevel.length < 8) {
-                                partylevel.push(2)
+                                partylevel.push(1)
                                 dragmove -= dragstep
                                 rebuild()
                             }
@@ -236,6 +236,7 @@
                 rebuild()
             })
             enemieslevel = JSON.parse(new URLSearchParams(window.location.search).get("e")) || [1]
+            enemiesicons = JSON.parse(new URLSearchParams(window.location.search).get("i")) || ["👹"]
             rebuild()
         })
     </script>
