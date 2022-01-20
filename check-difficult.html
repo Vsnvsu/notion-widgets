@@ -1,0 +1,242 @@
+<head>
+    <meta charset=“UTF-8”>
+    <link rel="stylesheet" href="notion.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <style>
+        body {
+            margin: 0px;
+            user-select: none;
+            color: #EBEBEB;
+        }
+        .frac {
+            display: inline-block;
+            text-align: center; 
+            vertical-align: middle;
+        }
+        .frac > span:nth-child(1) {
+            position: relative;
+            top: -2px;
+        }
+        .frac > span:nth-child(2) {
+            border-top: 2px solid #EBEBEB;
+            display: block;
+            padding: 0 5px;
+        }
+        .calc {
+            width: 100%;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            box-sizing: border-box;
+        }
+        .full-size {
+            --v: 20px;
+            background-color: #2F3437;
+            width: calc(100% - var(--v) * 2);
+            height: calc(100% - var(--v) * 2);
+            box-sizing: border-box;
+            margin-top: var(--v);
+            margin-left: var(--v);
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px #202020;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .party-size > svg {
+            fill: #EBEBEB;
+            height: 26px;
+            vertical-align: middle;
+            position: relative;
+            left: 5px;
+        }
+        .party-size {
+            opacity: 0.2;
+            transition: .3s;
+            cursor: grab;
+        }
+        .party-size:hover {
+            opacity: 0.4;
+        }
+        .frinput {
+            width: auto;
+            background-color: transparent;
+            border: 0px;
+            display:  inline;
+            color: #EBEBEB;
+            padding: 0px;
+            margin: 0px;
+            text-align: center;
+            font-size: 20px;
+            width: 26px;
+            font-family: inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+            font-weight: 500;
+        }
+        .frinput:hover {
+            outline: none;
+            box-shadow: 0px 0px 10px #202020ff;
+            border-radius: 5px;
+        }
+        .frinput:focus {
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="full-size">
+        <div class="calc">
+            <span class="party-size">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            </span>
+            (
+            <span class="party">
+                <span class="frac"><span>🧙‍♂️</span><span>2</span></span>
+            </span>
+            ) ⚔️ (
+            <span class="enemies">
+                <span class="frac enemy"><span>🐉</span><span class="val">10</span></span> +
+                <span class="frac enemy"><span>🐉</span><span class="val">5</span></span> + 
+                <span class="frac enemy"><span>🐉</span><span class="val">2</span></span>
+            </span>
+            ) = <span class="result"></span>
+        </div>
+    </div>
+    <script>
+        var partylevel = [5]
+        var partysign = ["🏹", "🔫", "🗡️", "🔪", "🛡️"]
+        var enemysign = ["🧙🏻‍♂️", "🐲", "🧚‍♀️", "🧛", "🧜🏽‍♂️", "👹", "🧞‍♀️", "🧟", "👹", "🧞"]
+        var dangersign = ["🟢", "🟢", "🟡", "🔴", "💀"]
+
+        function rebuild() {
+            var party = $(".party")[0]
+            party.innerHTML = ""
+            partylevel.forEach((lvl, i)=>{
+                party.innerHTML += `${i > 0 ? " + " : ""}
+                <span class="frac adder">
+                    <span>${partysign[Math.floor(Math.random()*partysign.length)]}</span>
+                    <span>
+                        <input class="frinput" id="player-${i}" value="${lvl}">
+                    </span>
+                </span>`
+            })
+
+            var enemies = $(".enemies")[0]
+
+            enemies.innerHTML = ""
+            enemieslevel.forEach((lvl, i)=>{
+                enemies.innerHTML += `${i > 0 ? " + " : ""}
+                <span class="frac enemy">
+                    <span>${enemysign[Math.floor(Math.random()*enemysign.length)]}</span>
+                    <span>
+                        <span class="val">${lvl}</span>
+                    </span>
+                </span>`
+            })
+
+            var et = [
+                [25, 50, 75, 100],
+                [50, 100, 150, 200],
+                [75, 150, 225, 400],
+                [125, 250, 375, 500],
+                [250, 500, 750, 1100],
+                [300, 600, 900, 1400],
+                [350, 750, 1100, 1700],
+                [450, 900, 1400, 2100],
+                [550, 1100, 1600, 2400],
+                [600, 1200, 1900, 2800],
+                [800, 1600, 2400, 3600],
+                [1000, 2000, 3000, 4500],
+                [1100, 2200, 3400, 5100],
+                [1250, 2500, 3800, 5700],
+                [1400, 2800, 4300, 6400],
+                [1600, 3200, 4800, 7200],
+                [2000, 3900, 5900, 8800],
+                [2100, 4200, 6300, 9500],
+                [2400, 4900, 7300, 10900],
+                [2800, 5700, 8500, 12700]
+            ]
+            var d = [10, 25, 50, 100, 200, 450, 700, 1100, 1800, 2300, 2900, 3900, 5000, 5900, 7200, 8400, 10000, 11500, 13000, 15000, 18000, 20000, 22000, 25000, 33000, 41000, 50000, 62000, 75000, 90000, 105000, 120000, 135000, 155000]
+            var mods = [1, 1.5, 2, 2.5, 3, 4, 4]
+            var weights = [0, 0, 0, 0]
+            var diff = 0
+            var enemycount = 0
+            var partycount
+            var modlvl = 0
+            var danger = 0
+            $(".frinput").each((i, e)=>{
+                weights.forEach((v, ii)=>{
+                    weights[ii] += et[e.value - 1][ii]
+                })
+            })
+            partycount = $(".frinput").length
+            $(".enemy .val").each((i, e)=>{
+                var lv = parseInt(e.innerText)
+                diff += d[lv - 1]
+            })
+            enemycount = $(".enemy .val").length 
+            
+            if (enemycount > 1) modlvl++
+            if (enemycount > 6) modlvl++
+            if (enemycount > 10) modlvl++
+            if (enemycount > 14) modlvl++
+            if (enemycount > 15) modlvl++
+            if (partycount < 3) modlvl++
+            if (partycount > 6) modlvl--
+            
+            diff *= mods[modlvl]
+
+            if (diff > weights[0]) danger++
+            if (diff > weights[1]) danger++
+            if (diff > weights[2]) danger++
+            if (diff > weights[3]) danger++
+
+            $(".result").text(dangersign[danger])
+        }
+        $(()=>{
+            var drag = false
+            var dragstep = 30
+            var dragmove = 0
+            $(document).on("mousedown", ".party-size", (e)=>{
+                drag = true
+                dragmove = e.clientX
+            })
+            $(document).on("mouseup", ()=>{
+                drag = false
+            })
+            $(document).on("mousemove", (e)=>{
+                if (drag) {
+                    var delta = Math.round((dragmove - e.clientX) / dragstep)
+                    if (Math.abs(delta) > 0) {
+                        if (delta > 0) {
+                            if (partylevel.length < 8) {
+                                partylevel.push(2)
+                                dragmove -= dragstep
+                                rebuild()
+                            }
+                        } else {
+                            if (partylevel.length > 1) {
+                                partylevel.pop()
+                                dragmove += dragstep
+                                rebuild()
+                            }
+                        }
+
+                    }
+                }
+            })
+            $(document).on("change", ".frinput", (e)=>{
+                var n = parseInt(e.target.value) || 1
+                n = Math.min(Math.max(n, 1), 20);
+                e.target.value = n
+                partylevel[parseInt(e.target.id.slice(7))] = n
+                rebuild()
+            })
+            enemieslevel = JSON.parse(new URLSearchParams(window.location.search).get("e")) || [1]
+            rebuild()
+        })
+    </script>
+</body>
